@@ -9,12 +9,11 @@ Game.prototype.nextPlayer = function() {
   if (this.turnCounter === 0) {
     this.turnCounter++;
     $("#your-turn").html("Player: " + this.player2.team);
-    //code
-  } else {
+  }
+  else {
     this.turnCounter--;
     this.npcMove();
     $("#your-turn").html("Player: " + this.player1.team);
-    //code
   }
 };
 
@@ -62,8 +61,6 @@ Game.prototype.init = function() {
         game.nextGame(game.player1, game.player2);
       }
       game.npcMove();
-    } else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
-      game.nextPlayer();
     }
     else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
       $(this).append("O");
