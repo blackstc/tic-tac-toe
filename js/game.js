@@ -12,8 +12,29 @@ Game.prototype.nextPlayer = function() {
     //code
   } else {
     this.turnCounter--;
+    this.npcMove();
     $("#your-turn").html("Player: " + this.player1.team);
     //code
+  }
+};
+
+Game.prototype.npcMove = function() {
+  var self = this;
+  var moveIndex = Math.floor(Math.random() * 9);
+  var box = $("#" + moveIndex);
+  if (this.board.makeMove(this.player2, box)) {
+    box.append("O");
+  } else {
+    this.npcMove();
+  }
+
+  if (this.board.checkWinner(this.player2)) {
+    alert('Player O Wins, you suck Player X');
+    this.player2.playerScore++;
+    this.player1.cellID = [];
+    this.player2.cellID = [];
+    this.updateScore(this.player2);
+    this.board.resetBoard();
   }
 };
 
@@ -38,7 +59,7 @@ Game.prototype.init = function() {
         game.updateScore(game.player1);
         game.board.resetBoard();
       }
-      game.nextPlayer();
+      game.npcMove();
     } else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
       $(this).append("O");
       if (game.board.checkWinner(game.player2)) {
@@ -66,12 +87,11 @@ Game.prototype.init = function() {
     game.updateScore(game.player1);
     game.updateScore(game.player2);
     game.board.resetBoard();
-    game.turnCounter = 1;
-    game.nextPlayer();
+    game.turnCounter = 0;
   });
 };
 
 $(document).ready(function() {
   var game = new Game();
   game.init();
-})
+});
