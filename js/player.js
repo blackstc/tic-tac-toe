@@ -4,5 +4,14 @@ var Player = function(team) {
   this.playerScore = 0;
 };
 
-var player1 = new Player("X");
-var player2 = new Player("O");
+Player.prototype.restart = function(won){
+  //won is bool, true if player won, false if not
+  this.cellID = [];
+  if (won)
+    this.playerScore++;
+};
+
+Player.prototype.reset = function(){
+  this.cellID = [];
+  this.playerScore = 0;
+};
