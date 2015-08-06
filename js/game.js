@@ -9,12 +9,11 @@ Game.prototype.nextPlayer = function() {
   if (this.turnCounter === 0) {
     this.turnCounter++;
     $("#your-turn").html("Player: " + this.player2.team);
-    //code
-  } else {
+  }
+  else {
     this.turnCounter--;
     this.npcMove();
     $("#your-turn").html("Player: " + this.player1.team);
-    //code
   }
 };
 
@@ -31,7 +30,11 @@ Game.prototype.npcMove = function() {
 
   if (this.board.checkWinner(this.player2)) {
     alert('Player O Wins, you suck Player X');
-    this.nextGame(this.player2, this.player1);
+    this.player2.playerScore++;
+    this.player1.cellID = [];
+    this.player2.cellID = [];
+    this.updateScore(this.player2);
+    this.board.resetBoard();
   }
 };
 
