@@ -31,11 +31,7 @@ Game.prototype.npcMove = function() {
 
   if (this.board.checkWinner(this.player2)) {
     alert('Player O Wins, you suck Player X');
-    this.player2.playerScore++;
-    this.player1.cellID = [];
-    this.player2.cellID = [];
-    this.updateScore(this.player2);
-    this.board.resetBoard();
+    this.nextGame(this.player2, this.player1);
   }
 };
 
@@ -63,9 +59,6 @@ Game.prototype.init = function() {
       }
       game.npcMove();
     } else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
-      game.nextPlayer();
-    }
-    else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
       $(this).append("O");
 
       if (game.board.checkWinner(game.player2)) {
