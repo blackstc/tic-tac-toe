@@ -17,25 +17,22 @@ Game.prototype.nextPlayer = function() {
   }
 };
 
-Game.prototype.updateScore = function(player) {
-  if (player.team === 'X')
-    $('#oneScore').html(player.playerScore);
-  else
-    $('#twoScore').html(player.playerScore);
+Game.prototype.updateScore = function() {
+  $('#oneScore').html(this.player1.playerScore);
+  $('#twoScore').html(this.player2.playerScore);
 };
 
 Game.prototype.nextGame = function(winner, loser) {
   //winner is the player that won
   winner.restart(true);
   loser.restart(false);
-  this.updateScore(winner);
+  this.updateScore();
   this.board.resetBoard();
 };
 
 Game.prototype.init = function() {
   var game = this;
   $(".box").on("click", function() {
-    console.log(this);
     if (game.turnCounter === 0 && game.board.makeMove(game.player1, $(this))) {
       $(this).append("X");
       if (game.board.checkWinner(game.player1)) {
@@ -43,8 +40,10 @@ Game.prototype.init = function() {
         game.nextGame(game.player1, game.player2);
       }
       game.nextPlayer();
-    } else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
+    }
+    else if (game.turnCounter === 1 && game.board.makeMove(game.player2, $(this))) {
       $(this).append("O");
+
       if (game.board.checkWinner(game.player2)) {
         alert('Player O Wins, you suck Player X');
         game.nextGame(game.player2, game.player1);
@@ -58,12 +57,9 @@ Game.prototype.init = function() {
   });
 
   $('.reset').on('click', function(){
-    game.player1.playerScore = 0;
-    game.player2.playerScore = 0;
-    game.player1.cellID = [];
-    game.player2.cellID = [];
-    game.updateScore(game.player1);
-    game.updateScore(game.player2);
+    game.player1.reset();
+    game.player2.reset();
+    game.updateScore();
     game.board.resetBoard();
     game.turnCounter = 1;
     game.nextPlayer();
