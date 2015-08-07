@@ -9,7 +9,7 @@ Game.prototype.nextPlayer = function() {
   if (this.turnCounter === 0) {
     this.turnCounter++;
     $("#your-turn").html("Player: " + this.player2.team);
-  }
+    }
   else {
     this.turnCounter--;
     this.npcMove();
@@ -22,9 +22,18 @@ Game.prototype.npcMove = function() {
   var self = this;
   var moveIndex = Math.floor(Math.random() * 9);
   var box = $("#" + moveIndex);
-  if (this.player2.checkWin.length > 0) {
-    moveIndex = this.player2.pickCell(this.player2.checkWin(this.player1.cellID, this.board.winCondition, this.player2.cellID));
-    box.append(this.player2.team);
+  if (this.player2.checkWin(this.player1.cellID, this.board.winCondition, this.player2.cellID).length > 0) {
+    moveIndex = this.player2.pickCell(this.player2, this.player2.checkWin(this.player1.cellID, this.board.winCondition, this.player2.cellID));
+    box = $("#" + moveIndex);
+    if (this.board.makeMove(this.player2, box)) {
+      box.append(this.player2.team);
+    }
+  } else if (this.player2.blockPlayer(this.player1.cellID, this.board.winCondition).length > 0) {
+    moveIndex = this.player2.pickCell(this.player1, this.player2.blockPlayer(this.player1.cellID, this.board.winCondition));
+    box = $("#" + moveIndex);
+    if (this.board.makeMove(this.player2, box)) {
+      box.append(this.player2.team);
+    }
   } else if (this.board.makeMove(this.player2, box)) {
     box.append("O");
   } else {
@@ -33,7 +42,7 @@ Game.prototype.npcMove = function() {
 
   if (this.board.checkWinner(this.player2)) {
     alert('Player O Wins, you suck Player X');
-    game.nextGame(game.player2, game.player1);
+    this.nextGame(this.player2, this.player1);
   }
 };
 
