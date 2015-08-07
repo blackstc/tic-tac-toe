@@ -1,7 +1,7 @@
 var Game = function() {
   this.board = new Board();
   this.player1 = new Player("X");
-  this.player2 = new Player("O");
+  this.player2 = new Comp("O");
   this.turnCounter = 0;
 };
 
@@ -22,7 +22,10 @@ Game.prototype.npcMove = function() {
   var self = this;
   var moveIndex = Math.floor(Math.random() * 9);
   var box = $("#" + moveIndex);
-  if (this.board.makeMove(this.player2, box)) {
+  if (this.player2.checkWin.length > 0) {
+    moveIndex = this.player2.pickCell(this.player2.checkWin(this.player1.cellID, this.board.winCondition, this.player2.cellID));
+    box.append(this.player2.team);
+  } else if (this.board.makeMove(this.player2, box)) {
     box.append("O");
   } else {
     this.npcMove();
@@ -30,11 +33,7 @@ Game.prototype.npcMove = function() {
 
   if (this.board.checkWinner(this.player2)) {
     alert('Player O Wins, you suck Player X');
-    this.player2.playerScore++;
-    this.player1.cellID = [];
-    this.player2.cellID = [];
-    this.updateScore(this.player2);
-    this.board.resetBoard();
+    game.nextGame(game.player2, game.player1);
   }
 };
 

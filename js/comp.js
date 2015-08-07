@@ -33,3 +33,11 @@ Comp.prototype.blockPlayer = function (playerMoves, winCondition) {
   // body...
   return this.checkWin(this.cellID, winCondition, playerMoves);
 };
+
+Comp.prototype.pickCell = function (compWinMoves) {
+  var cellID = this.cellID;
+  var pickOne = compWinMoves[0];
+  return pickOne.filter(function(cell) {
+    return cellID.indexOf(cell) === -1;
+  })[0];
+};
